@@ -1,0 +1,18 @@
+{
+  "name": "geocode-api",
+  "version": "0.0.1",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "qs": "^6.3.1",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0"
+  }
+}
