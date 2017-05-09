@@ -7,11 +7,13 @@ export default class Directions {
     this.url = 'https://maps.googleapis.com/maps/api/directions/json';
   }
 
-  query(address) {
+  query(parameters) {
     const query = qs.stringify({
-      key: this.key,
-      address: address,
+      ...parameters,
+      key: this.key
     });
+
+    console.log(query);
 
     return rp({
       url: this.url + '?' + query,
