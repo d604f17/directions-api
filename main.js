@@ -13,8 +13,6 @@ export default class Directions {
       key: this.key
     });
 
-    console.log(query);
-
     return rp({
       url: this.url + '?' + query,
       json: true,
