@@ -46,12 +46,12 @@ var Directions = function () {
           if (result.status === 'OK') {
             resolve(result);
           } else if (result.status === 'OVER_QUERY_LIMIT') {
-            console.log('key exhaused, changing key');
-            _this.activeKey++;
             _this.query(parameters);
           } else if (result.status === 'ZERO_RESULTS') {
             resolve(result);
           } else {
+            // console.log('key exhaused, changing key');
+            // this.activeKey++;
             console.log(result.status);
             resolve(result);
           }
