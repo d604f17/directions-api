@@ -21,23 +21,38 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Directions = function () {
-  function Directions(key) {
+  function Directions(keys) {
     _classCallCheck(this, Directions);
 
-    this.key = key;
+    this.keys = keys;
+    this.activeKey = 0;
     this.url = 'https://maps.googleapis.com/maps/api/directions/json';
   }
 
   _createClass(Directions, [{
     key: 'query',
     value: function query(parameters) {
-      var query = _qs2.default.stringify(_extends({}, parameters, {
-        key: this.key
-      }));
+      var _this = this;
 
-      return (0, _requestPromise2.default)({
-        url: this.url + '?' + query,
-        json: true
+      return new Promise(function (resolve) {
+        var query = _qs2.default.stringify(_extends({}, parameters, {
+          key: _this.keys[_this.activeKey]
+        }));
+
+        (0, _requestPromise2.default)({
+          url: _this.url + '?' + query,
+          json: true
+        }).then(function (result) {
+          if (result.status === 'OK') {
+            resolve(result);
+          } else if (result.status === 'OVER_QUERY_LIMIT') {
+            _this.activeKey++;
+            _this.query(parameters);
+          } else {
+            console.log(result.status);
+            resolve(result);
+          }
+        });
       });
     }
   }]);
