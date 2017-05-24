@@ -15,22 +15,28 @@ export default class Directions {
         key: this.keys[this.activeKey],
       });
 
-      rp({
-        url: this.url + '?' + query,
-        json: true,
-      }).then(result => {
-        if (result.status === 'OK') {
-          resolve(result);
-        } else if (result.status === 'OVER_QUERY_LIMIT') {
-          this.query(parameters);
-        } else if (result.status === 'ZERO_RESULTS') {
-          resolve(result);
-        } else {
-          // console.log('key exhaused, changing key');
-          // this.activeKey++;
-          console.log(result.status);
-          resolve(result);
-        }
+      const request = (callback) => {
+        return rp({
+          url: this.url + '?' + query,
+          json: true,
+        }).then(result => {
+          if (result.status === 'OK') {
+            callback(result);
+          } else if (result.status === 'OVER_QUERY_LIMIT') {
+            request(callback);
+          } else if (result.status === 'ZERO_RESULTS') {
+            callback(result);
+          } else {
+            console.log(result.status);
+            // console.log('key exhaused, changing key');
+            // this.activeKey++;
+            callback(result);
+          }
+        });
+      };
+
+      request(function(result) {
+        resolve(result);
       });
     });
   }

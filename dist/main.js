@@ -39,22 +39,28 @@ var Directions = function () {
           key: _this.keys[_this.activeKey]
         }));
 
-        (0, _requestPromise2.default)({
-          url: _this.url + '?' + query,
-          json: true
-        }).then(function (result) {
-          if (result.status === 'OK') {
-            resolve(result);
-          } else if (result.status === 'OVER_QUERY_LIMIT') {
-            _this.query(parameters);
-          } else if (result.status === 'ZERO_RESULTS') {
-            resolve(result);
-          } else {
-            // console.log('key exhaused, changing key');
-            // this.activeKey++;
-            console.log(result.status);
-            resolve(result);
-          }
+        var request = function request(callback) {
+          return (0, _requestPromise2.default)({
+            url: _this.url + '?' + query,
+            json: true
+          }).then(function (result) {
+            if (result.status === 'OK') {
+              callback(result);
+            } else if (result.status === 'OVER_QUERY_LIMIT') {
+              request(callback);
+            } else if (result.status === 'ZERO_RESULTS') {
+              callback(result);
+            } else {
+              console.log(result.status);
+              // console.log('key exhaused, changing key');
+              // this.activeKey++;
+              callback(result);
+            }
+          });
+        };
+
+        request(function (result) {
+          resolve(result);
         });
       });
     }
