@@ -28,9 +28,9 @@ export default class Directions {
             callback(result);
           } else {
             console.log(result.status);
-            // console.log('key exhaused, changing key');
-            // this.activeKey++;
-            callback(result);
+            console.log('key may be exhaused, changing key');
+            this.activeKey++;
+            request(callback);
           }
         });
       };
