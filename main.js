@@ -24,6 +24,8 @@ export default class Directions {
         } else if (result.status === 'OVER_QUERY_LIMIT') {
           this.activeKey++;
           this.query(parameters);
+        } else if (result.status === 'ZERO_RESULTS') {
+          resolve(result);
         } else {
           console.log(result.status);
           resolve(result);
