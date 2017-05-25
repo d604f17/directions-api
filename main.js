@@ -10,12 +10,12 @@ export default class Directions {
 
   query(parameters) {
     return new Promise(resolve => {
-      const query = qs.stringify({
-        ...parameters,
-        key: this.keys[this.activeKey],
-      });
-
       const request = (callback) => {
+        const query = qs.stringify({
+          ...parameters,
+          key: this.keys[this.activeKey],
+        });
+
         return rp({
           url: this.url + '?' + query,
           json: true,

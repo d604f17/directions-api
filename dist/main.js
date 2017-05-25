@@ -35,11 +35,11 @@ var Directions = function () {
       var _this = this;
 
       return new Promise(function (resolve) {
-        var query = _qs2.default.stringify(_extends({}, parameters, {
-          key: _this.keys[_this.activeKey]
-        }));
-
         var request = function request(callback) {
+          var query = _qs2.default.stringify(_extends({}, parameters, {
+            key: _this.keys[_this.activeKey]
+          }));
+
           return (0, _requestPromise2.default)({
             url: _this.url + '?' + query,
             json: true
