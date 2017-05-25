@@ -49,6 +49,7 @@ var Directions = function () {
             if (result.status === 'OK') {
               callback(result);
             } else if (result.status === 'OVER_QUERY_LIMIT') {
+              console.log(result.status);
               if (!retrying) {
                 process.stdout.write('OVER_QUERY_LIMIT: retrying');
               } else {
