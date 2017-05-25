@@ -10,8 +10,6 @@ export default class Directions {
 
   query(parameters) {
     return new Promise(resolve => {
-      let retrying = false;
-
       const query = qs.stringify({
         ...parameters,
         key: this.keys[this.activeKey],
@@ -25,23 +23,16 @@ export default class Directions {
           if (result.status === 'OK') {
             callback(result);
           } else if (result.status === 'OVER_QUERY_LIMIT') {
-            console.log(result);
-            // if(!retrying) {
-            //   process.stdout.write('OVER_QUERY_LIMIT: retrying');
-            // } else {
-            //   process.stdout.write('.');
-            // }
+            if(result.error_message === 'You have exceeded your daily request quota for this API.') {
+              console.log('key exhaused, changing key');
+              this.activeKey++;
+            }
 
-            setTimeout(function() {
-              retrying = false;
-              request(callback);
-            }, 1000);
+            request(callback);
           } else if (result.status === 'ZERO_RESULTS') {
             callback(result);
           } else {
             console.log(result.status);
-            console.log('key may be exhaused, changing key');
-            this.activeKey++;
             request(callback);
           }
         });

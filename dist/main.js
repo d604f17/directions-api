@@ -35,8 +35,6 @@ var Directions = function () {
       var _this = this;
 
       return new Promise(function (resolve) {
-        var retrying = false;
-
         var query = _qs2.default.stringify(_extends({}, parameters, {
           key: _this.keys[_this.activeKey]
         }));
@@ -49,23 +47,16 @@ var Directions = function () {
             if (result.status === 'OK') {
               callback(result);
             } else if (result.status === 'OVER_QUERY_LIMIT') {
-              console.log(result);
-              // if(!retrying) {
-              //   process.stdout.write('OVER_QUERY_LIMIT: retrying');
-              // } else {
-              //   process.stdout.write('.');
-              // }
+              if (result.error_message === 'You have exceeded your daily request quota for this API.') {
+                console.log('key exhaused, changing key');
+                _this.activeKey++;
+              }
 
-              setTimeout(function () {
-                retrying = false;
-                request(callback);
-              }, 1000);
+              request(callback);
             } else if (result.status === 'ZERO_RESULTS') {
               callback(result);
             } else {
               console.log(result.status);
-              console.log('key may be exhaused, changing key');
-              _this.activeKey++;
               request(callback);
             }
           });
