@@ -23,7 +23,9 @@ export default class Directions {
           if (result.status === 'OK') {
             callback(result);
           } else if (result.status === 'OVER_QUERY_LIMIT') {
-            request(callback);
+            setTimeout(() => {
+              request(callback);
+            }, 1000);
           } else if (result.status === 'ZERO_RESULTS') {
             callback(result);
           } else {
