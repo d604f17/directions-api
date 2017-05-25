@@ -48,7 +48,7 @@ var Directions = function () {
               callback(result);
             } else if (result.status === 'OVER_QUERY_LIMIT') {
               if (result.error_message === 'You have exceeded your daily request quota for this API.') {
-                console.log('key exhaused, changing key');
+                console.log('key exhaused ' + _this.activeKey + ', changing key');
                 _this.activeKey++;
               }
 

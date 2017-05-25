@@ -23,8 +23,9 @@ export default class Directions {
           if (result.status === 'OK') {
             callback(result);
           } else if (result.status === 'OVER_QUERY_LIMIT') {
-            if(result.error_message === 'You have exceeded your daily request quota for this API.') {
-              console.log('key exhaused, changing key');
+            if (result.error_message ===
+                'You have exceeded your daily request quota for this API.') {
+              console.log('key exhaused ' + this.activeKey + ', changing key');
               this.activeKey++;
             }
 
