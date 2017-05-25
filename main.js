@@ -10,6 +10,8 @@ export default class Directions {
 
   query(parameters) {
     return new Promise(resolve => {
+      let retrying = false;
+
       const query = qs.stringify({
         ...parameters,
         key: this.keys[this.activeKey],
@@ -23,7 +25,14 @@ export default class Directions {
           if (result.status === 'OK') {
             callback(result);
           } else if (result.status === 'OVER_QUERY_LIMIT') {
-            setTimeout(() => {
+            if(!retrying) {
+              process.stdout.write('OVER_QUERY_LIMIT: retrying');
+            } else {
+              process.stdout.write('.');
+            }
+
+            setTimeout(function() {
+              retrying = false;
               request(callback);
             }, 1000);
           } else if (result.status === 'ZERO_RESULTS') {
